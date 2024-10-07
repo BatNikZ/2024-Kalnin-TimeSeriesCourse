@@ -29,7 +29,7 @@ class TimeSeriesKNN:
             self.metric_params.update(metric_params)
 
 
-    def fit(self, X_train: np.ndarray, Y_train: np.ndarray) -> Self:
+    def fit(self, X_train: np.ndarray, Y_train: np.ndarray): #-> Self:
         """
         Fit the model using X_train as training data and Y_train as labels
 

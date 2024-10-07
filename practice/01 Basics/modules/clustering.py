@@ -1,3 +1,5 @@
+from typing import Optional
+
 import numpy as np
 import pandas as pd
 from sklearn.cluster import AgglomerativeClustering
@@ -23,8 +25,9 @@ class TimeSeriesHierarchicalClustering:
 
         self.n_clusters: int = n_clusters
         self.method: str = method
-        self.model: AgglomerativeClustering | None = None
-        self.linkage_matrix: np.ndarray | None = None
+        self.model: Optional[AgglomerativeClustering] = None
+        #self.linkage_matrix: np.ndarray | None = None
+        self.linkage_matrix: Optional[np.ndarray] = None
 
 
     def _create_linkage_matrix(self) -> np.ndarray:
@@ -66,8 +69,10 @@ class TimeSeriesHierarchicalClustering:
         self: the fitted model
         """
 
-       # INSERT YOUR CODE
-
+        # INSERT YOUR CODE
+        self.model = AgglomerativeClustering(n_clusters=self.n_clusters, linkage=self.method, compute_distances=True)
+        self.model.labels_ = self.model.fit_predict(distance_matrix)
+        self.linkage_matrix = self._create_linkage_matrix()
         return self
 
 
@@ -86,7 +91,7 @@ class TimeSeriesHierarchicalClustering:
 
         self.fit(distance_matrix)
 
-        return self.labels_
+        return self.model.labels_
 
 
     def _draw_timeseries_allclust(self, dx: pd.DataFrame, labels: np.ndarray, leaves: list[int], gs: gridspec.GridSpec, ts_hspace: int) -> None:
@@ -124,7 +129,7 @@ class TimeSeriesHierarchicalClustering:
 
             plt.plot(ts, color=color_ts)
             plt.text(ts_len+margin, 0, f'class = {label}')
-
+        plt.show()
 
     def plot_dendrogram(self, df: pd.DataFrame, labels: np.ndarray, ts_hspace: int = 12, title: str = 'Dendrogram') -> None:
         """ 
@@ -153,5 +158,5 @@ class TimeSeriesHierarchicalClustering:
         plt.title(title, fontsize=16, weight='bold')
 
         ddata = dendrogram(self.linkage_matrix, orientation="left", color_threshold=sorted(self.model.distances_)[-2], show_leaf_counts=True)
-
+        #plt.show()
         self._draw_timeseries_allclust(df, labels, ddata["leaves"], gs, ts_hspace)
