@@ -154,7 +154,15 @@ class NaiveBestMatchFinder(BestMatchFinder):
             'distance' : []
         }
         
-        # INSERT YOUR CODE
+        if (self.excl_zone_frac is None):
+            excl_zone = 0
+        else:
+            excl_zone = int(np.ceil(m / self.excl_zone_frac))
+        q_len = len(query)
+
+        distances = [DTW_distance(z_normalize(query), z_normalize(ts_data[e]), self.r) for e in range(0, ts_data.shape[1])] 
+    
+        bestmatch = topK_match(distances, excl_zone, m, bsf)
 
         return bestmatch
 

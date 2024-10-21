@@ -10,7 +10,7 @@ import plotly.express as px
 plotly.offline.init_notebook_mode(connected=True)
 
 
-def plot_ts_set(ts_set: np.ndarray, title: str = 'Input Time Series Set') -> None:
+def plot_ts_set(ts_set: np.ndarray, title: str = 'Input Time Series Set'):
     """
     Plot the time series set
 
@@ -51,7 +51,7 @@ def plot_ts_set(ts_set: np.ndarray, title: str = 'Input Time Series Set') -> Non
                       legend=dict(font=dict(size=20, color='black'))
                       )
 
-    fig.show(renderer="colab")
+    fig.show(renderer="browser")
 
 
 def mplot2d(x: np.ndarray, y: np.ndarray, plot_title: str = None, x_title: str = None, y_title: str = None, trace_titles: np.ndarray = None) -> None:
@@ -160,7 +160,6 @@ def plot_bestmatch_results(ts: np.ndarray, query: np.ndarray, bestmatch_results:
     bestmatch_results: output data found by the best match algorithm
     """
 
-    # INSERT YOUR CODE
     query_len = query.shape[0]
     best_match = ts[bestmatch_results["indices"][0]:bestmatch_results["indices"][0]+query_len]
 
